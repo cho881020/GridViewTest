@@ -50,15 +50,25 @@ public class ImageListViewAdapter extends ArrayAdapter<String> {
             String left = mList.get(position * 3);
 
             Glide.with(mContext).load(left)
-                    .centerCrop().thumbnail( 0.2f ).into(thumbImage1);
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+//                    .dontAnimate()
+                    .centerCrop().thumbnail( 0.3f ).into(thumbImage1);
 
             String center = mList.get(position * 3 + 1);
 
             Glide.with(mContext).load(center)
-                    .centerCrop().thumbnail( 0.2f ).into(thumbImage2);
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+//                    .dontAnimate()
+                    .centerCrop().thumbnail( 0.3f ).into(thumbImage2);
             String right = mList.get(position * 3 + 2);
+
             Glide.with(mContext).load(right)
-                    .centerCrop().thumbnail( 0.2f ).into(thumbImage3);
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+//                    .dontAnimate()
+                    .centerCrop().thumbnail( 0.3f ).into(thumbImage3);
         } catch (Exception e) {
             e.printStackTrace();
         }

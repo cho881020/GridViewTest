@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param activity
      */
-    public static void verifyStoragePermissions(Activity activity) {
+    public void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -58,6 +58,37 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+        else {
+
+            final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
+            final String orderBy = MediaStore.Images.Media._ID;
+
+            Cursor imagecursor = managedQuery(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
+                    null, orderBy);
+            int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
+            this.count = imagecursor.getCount();
+            this.arrPath = new String[this.count];
+            for (int i = 0; i < this.count; i++) {
+                imagecursor.moveToPosition(i);
+                int id = imagecursor.getInt(image_column_index);
+                int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                arrPath[i] = imagecursor.getString(dataColumnIndex);
+            }
+//        imagecursor.close();
+
+            Log.d("path_count", arrPath.length + "개");
+            ArrayList<String> paths = new ArrayList<>(Arrays.asList(arrPath));
+
+            ImageAdapter imageAdapter = new ImageAdapter(paths);
+            Log.d("adapter", "made");
+
+
+//        phoneImageGrid.setAdapter(imageAdapter);
+
+            ImageListViewAdapter adapter = new ImageListViewAdapter(MainActivity.this, paths);
+            imageListView.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -67,34 +98,6 @@ public class MainActivity extends AppCompatActivity {
         this.imageListView = (ListView) findViewById(R.id.imageListView);
 
         verifyStoragePermissions(this);
-        final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
-        final String orderBy = MediaStore.Images.Media._ID;
-
-        Cursor imagecursor = managedQuery(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
-                null, orderBy);
-        int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
-        this.count = imagecursor.getCount();
-        this.arrPath = new String[this.count];
-        for (int i = 0; i < this.count; i++) {
-            imagecursor.moveToPosition(i);
-            int id = imagecursor.getInt(image_column_index);
-            int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            arrPath[i] = imagecursor.getString(dataColumnIndex);
-        }
-//        imagecursor.close();
-
-        Log.d("path_count", arrPath.length + "개");
-        ArrayList<String> paths = new ArrayList<>(Arrays.asList(arrPath));
-
-        ImageAdapter imageAdapter = new ImageAdapter(paths);
-        Log.d("adapter", "made");
-
-
-//        phoneImageGrid.setAdapter(imageAdapter);
-
-        ImageListViewAdapter adapter = new ImageListViewAdapter(MainActivity.this, paths);
-        imageListView.setAdapter(adapter);
 
     }
 
