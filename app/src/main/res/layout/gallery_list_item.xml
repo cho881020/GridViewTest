@@ -13,16 +13,31 @@
         android:layout_weight="1"
         android:src="@drawable/navi_icon_list"
         android:layout_width="0dp"
-        android:layout_height="150dp" />
+        android:layout_height="100dp" />
     <ImageView
         android:id="@+id/thumbImage2"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="150dp" />
+        android:layout_height="100dp" />
     <ImageView
         android:id="@+id/thumbImage3"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="150dp" />
+        android:layout_height="100dp" />
+    <ImageView
+        android:id="@+id/thumbImage4"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="100dp" />
+    <ImageView
+        android:id="@+id/thumbImage5"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="100dp" />
+    <ImageView
+        android:id="@+id/thumbImage6"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="100dp" />
 
 </LinearLayout>

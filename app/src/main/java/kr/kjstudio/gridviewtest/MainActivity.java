@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -60,37 +62,58 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
 
-            final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
-            final String orderBy = MediaStore.Images.Media._ID;
+            loadImages();
+        }
+    }
 
-            Cursor imagecursor = managedQuery(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
-                    null, orderBy);
-            int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
-            this.count = imagecursor.getCount();
-            this.arrPath = new String[this.count];
-            for (int i = 0; i < this.count; i++) {
-                imagecursor.moveToPosition(i);
-                int id = imagecursor.getInt(image_column_index);
-                int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                arrPath[i] = imagecursor.getString(dataColumnIndex);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한 허가
+                // 해당 권한을 사용해서 작업을 진행할 수 있습니다
+                
+                loadImages();
+            } else {
+                // 권한 거부
+                // 사용자가 해당권한을 거부했을때 해주어야 할 동작을 수행합니다
+                Toast.makeText(MainActivity.this, "권한을 승인해주셔야합니다.", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    void loadImages() {
+        final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
+        final String orderBy = MediaStore.Images.Media._ID;
+
+        Cursor imagecursor = managedQuery(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
+                null, orderBy);
+        int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
+        this.count = imagecursor.getCount();
+        this.arrPath = new String[this.count];
+        for (int i = 0; i < this.count; i++) {
+            imagecursor.moveToPosition(i);
+            int id = imagecursor.getInt(image_column_index);
+            int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            arrPath[i] = imagecursor.getString(dataColumnIndex);
+        }
 //        imagecursor.close();
 
-            Log.d("path_count", arrPath.length + "개");
-            ArrayList<String> paths = new ArrayList<>(Arrays.asList(arrPath));
+        Log.d("path_count", arrPath.length + "개");
+        ArrayList<String> paths = new ArrayList<>(Arrays.asList(arrPath));
 
-            ImageAdapter imageAdapter = new ImageAdapter(paths);
-            Log.d("adapter", "made");
+        ImageAdapter imageAdapter = new ImageAdapter(paths);
+        Log.d("adapter", "made");
 
 
 //        phoneImageGrid.setAdapter(imageAdapter);
 
-            ImageListViewAdapter adapter = new ImageListViewAdapter(MainActivity.this, paths);
-            imageListView.setAdapter(adapter);
-        }
-    }
+        ImageListViewAdapter adapter = new ImageListViewAdapter(MainActivity.this, paths);
+        imageListView.setAdapter(adapter);
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

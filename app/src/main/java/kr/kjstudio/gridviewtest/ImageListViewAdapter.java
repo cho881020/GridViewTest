@@ -38,49 +38,100 @@ public class ImageListViewAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
+        ListItemView row = (ListItemView) convertView;
 
         if (row == null) {
-            row = inf.inflate(R.layout.gallery_list_item, null);
+            row = new ListItemView(mContext);
+
         }
-        ImageView thumbImage1 = (ImageView) row.findViewById(R.id.thumbImage1);
-        ImageView thumbImage2 = (ImageView) row.findViewById(R.id.thumbImage2);
-        ImageView thumbImage3 = (ImageView) row.findViewById(R.id.thumbImage3);
         try {
-            String left = mList.get(position * 3);
+            String path1 = mList.get(position * 6);
 
-            Glide.with(mContext).load(left)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-//                    .dontAnimate()
-                    .centerCrop().thumbnail( 0.3f ).into(thumbImage1);
+            if (!path1.equals(row.path1)) {
+                Glide.with(mContext).load(path1)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .dontAnimate()
+                        .centerCrop().thumbnail(0.3f).into(row.thumbImage1);
+                row.path1 = path1;
+            }
 
-            String center = mList.get(position * 3 + 1);
+            String path2 = mList.get(position * 6+1);
 
-            Glide.with(mContext).load(center)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-//                    .dontAnimate()
-                    .centerCrop().thumbnail( 0.3f ).into(thumbImage2);
-            String right = mList.get(position * 3 + 2);
+            if (!path2.equals(row.path2)) {
+                Glide.with(mContext).load(path2)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .dontAnimate()
+                        .centerCrop().thumbnail(0.3f).into(row.thumbImage2);
+                row.path2 = path2;
+            }
+            String path3 = mList.get(position * 6+2);
 
-            Glide.with(mContext).load(right)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-//                    .dontAnimate()
-                    .centerCrop().thumbnail( 0.3f ).into(thumbImage3);
+            if (!path3.equals(row.path3)) {
+                Glide.with(mContext).load(path3)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .dontAnimate()
+                        .centerCrop().thumbnail(0.3f).into(row.thumbImage3);
+                row.path3 = path3;
+            }
+            String path4 = mList.get(position * 6+3);
+
+            if (!path4.equals(row.path4)) {
+                Glide.with(mContext).load(path4)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .dontAnimate()
+                        .centerCrop().thumbnail(0.3f).into(row.thumbImage4);
+                row.path4 = path4;
+            }
+
+            String path5 = mList.get(position * 6+4);
+
+            if (!path5.equals(row.path5)) {
+                Glide.with(mContext).load(path5)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .dontAnimate()
+                        .centerCrop().thumbnail(0.3f).into(row.thumbImage5);
+                row.path5 = path5;
+            }
+
+            String path6 = mList.get(position * 6+5);
+
+            if (!path6.equals(row.path6)) {
+                Glide.with(mContext).load(path6)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .dontAnimate()
+                        .centerCrop().thumbnail(0.3f).into(row.thumbImage6);
+                row.path6 = path6;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
         return row;
     }
 
+    @Override
+
+    public int getViewTypeCount() {
+
+        return 75;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        return position % 75;
+    }
 
     @Override
     public int getCount() {
-        return mList.size()/3 +1;
+        return mList.size() / 6 + 1;
     }
 
 }
